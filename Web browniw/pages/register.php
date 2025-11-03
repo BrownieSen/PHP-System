@@ -31,10 +31,12 @@ include __DIR__ . '/../includes/header.php';
       <div class="two-cols">
         <label>Birthdate<input type="date" name="birthdate" value="<?=htmlspecialchars($old['birthdate'] ?? '')?>" required></label>
         <label>Gender
-          <div class="gender-group">
-            <label><input type="radio" name="gender" value="Male" <?= (isset($old['gender']) && $old['gender']=='Male') ? 'checked':'' ?> required> Male</label>
-            <label><input type="radio" name="gender" value="Female" <?= (isset($old['gender']) && $old['gender']=='Female') ? 'checked':'' ?> required> Female</label>
-          </div>
+          <select name="gender" id="gender" required>
+            <option value="" disabled <?= (!isset($old['gender']) || $old['gender'] == '') ? 'selected' : '' ?>>Select Gender</option>
+            <option value="Male" <?= (isset($old['gender']) && $old['gender'] == 'Male') ? 'selected' : '' ?>>Male</option>
+            <option value="Female" <?= (isset($old['gender']) && $old['gender'] == 'Female') ? 'selected' : '' ?>>Female</option>
+            <option value="Other" <?= (isset($old['gender']) && $old['gender'] == 'Other') ? 'selected' : '' ?>>Other</option>
+          </select>
         </label>
       </div>
       <div class="two-cols">
@@ -43,45 +45,53 @@ include __DIR__ . '/../includes/header.php';
       </div>
       <div class="two-cols">
         <label>Confirm Password<input type="password" name="confirm_password" required></label>
+        <label>Department
+          <select name="department" id="departmentSelect" required>
+            <option value="">Select Department</option>
+            <option value="COMSOC" <?= (isset($old['department']) && $old['department'] == 'COMSOC') ? 'selected' : '' ?>>COMSOC</option>
+            <option value="STIGMA" <?= (isset($old['department']) && $old['department'] == 'STIGMA') ? 'selected' : '' ?>>STIGMA</option>
+            <option value="THM" <?= (isset($old['department']) && $old['department'] == 'THM') ? 'selected' : '' ?>>THM</option>
+          </select>
+        </label>
+
         <label>Course
           <select name="course" id="courseSelect" required>
-            <option value="">Select</option>
-            <option value="CS" <?= (isset($old['course']) && $old['course']=='CS')?'selected':'' ?>>CS</option>
-            <option value="IT" <?= (isset($old['course']) && $old['course']=='IT')?'selected':'' ?>>IT</option>
-            <option value="THM" <?= (isset($old['course']) && $old['course']=='THM')?'selected':'' ?>>THM</option>
+            <option value="">Select Course</option>
           </select>
         </label>
       </div>
 
-      <div class="form-row">
-        <button class="btn" type="submit">Submit</button>
-        <button class="btn outline" type="reset">Reset</button>
-      </div>
+        <div class="form-row">
+          <button class="btn" type="submit">Submit</button>
+          <button class="btn outline" type="reset">Reset</button>
+        </div>
+        <div class="form-row" style="text-align:center;">
+          <a class="btn outline" href="login.php">Back to Login</a>
+        </div>
     </form>
   </div>
 </main>
 
 <script>
-// set role behaviour client-side (informational only)
 document.addEventListener('DOMContentLoaded', function(){
-  var course = document.getElementById('courseSelect');
-  course.addEventListener('change', function(){
-    // you asked role mapping: CS/IT => COMSOC, THM => HM
-    // This demo does not show role field (role auto assigned server-side),
-    // but we keep client-side hint if needed.
-    var val = course.value;
-    var hint = document.getElementById('roleHint');
-    if(!hint){
-      hint = document.createElement('div');
-      hint.id = 'roleHint';
-      hint.style.marginTop = '8px';
-      course.parentNode.appendChild(hint);
+  const dept = document.getElementById('departmentSelect');
+  const course = document.getElementById('courseSelect');
+
+  dept.addEventListener('change', function() {
+    const d = dept.value;
+    course.innerHTML = '<option value="">Select Course</option>';
+    if (d === 'COMSOC') {
+      course.innerHTML += '<option value="CS">BS Computer Science</option>';
+      course.innerHTML += '<option value="IT">BS Information Technology</option>';
+    } else if (d === 'STIGMA') {
+      course.innerHTML += '<option value="BMMA">Bachelor of Multimedia Arts</option>';
+    } else if (d === 'THM') {
+      course.innerHTML += '<option value="HM">Hospitality Management</option>';
+      course.innerHTML += '<option value="TM">Tourism Management</option>';
     }
-    if (val === 'THM') hint.textContent = 'Role will be: HM';
-    else if (val === 'CS' || val === 'IT') hint.textContent = 'Role will be: COMSOC';
-    else hint.textContent = '';
   });
 });
 </script>
+
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>

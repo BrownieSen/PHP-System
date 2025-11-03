@@ -19,15 +19,23 @@ $gender = trim($_POST['gender'] ?? '');
 $username = trim($_POST['username'] ?? '');
 $password = trim($_POST['password'] ?? '');
 $confirm = trim($_POST['confirm_password'] ?? '');
-$course = trim($_POST['course'] ?? '');
+$department = $_POST['department'];
+$course = $_POST['course'];
 // determine role based on course
+// determine role based on department
 $role = '';
-if (in_array($course, ['CS','IT'])) $role = 'COMSOC';
-elseif ($course === 'THM') $role = 'HM';
+if ($department === 'COMSOC') {
+    $role = 'COMSOC';
+} elseif ($department === 'STIGMA') {
+    $role = 'STIGMA';
+} elseif ($department === 'THM') {
+    $role = 'THM';
+}
+
 
 $errors = [];
 
-if ($fname === '' || $lname === '' || $age === '' || $mobile === '' || $email === '' || $birthdate === '' || $gender === '' || $username === '' || $password === '' || $confirm === '' || $course === '') {
+if ($fname === '' || $lname === '' || $age === '' || $mobile === '' || $email === '' || $birthdate === '' || $gender === '' || $username === '' || $password === '' || $confirm === '' || $department === '' || $course === '') {
     $errors[] = 'All fields are required.';
 }
 if ($password !== $confirm) {
@@ -51,8 +59,10 @@ $users = read_users();
 $users[] = [
     'fname'=>$fname,'mname'=>$mname,'lname'=>$lname,'age'=>$age,
     'mobile'=>$mobile,'email'=>$email,'birthdate'=>$birthdate,'gender'=>$gender,
-    'username'=>$username,'password'=>$password,'course'=>$course,'role'=>$role
+    'username'=>$username,'password'=>$password,
+    'department'=>$department,'course'=>$course,'role'=>$role
 ];
+
 if (save_users($users)) {
     session_start();
     $_SESSION['register_success'] = 'Account created successfully. You can now login.';

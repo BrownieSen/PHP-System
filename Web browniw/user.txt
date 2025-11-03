@@ -1,2 +1,2 @@
-admin|D|Admin|21|09171234567|admin@example.com|01/01/2000|Male|admin|admin123|CS|COMSOC
-Gian Jaykov|Hufana|Ortiz|21|09459755365|winteryt7@gmail.com|2021-02-18|Male|Brownie|brownie123|CS|COMSOC
+Gian Jaykov|Hufana|Ortiz|21|09459755365|dawd@gmail.com|2025-11-24|Male|adw|adw12|STIGMA|BMMA|COMSOC
+Gian Jaykov|Hufana|Ortiz|21|09459755365|winteryt7@gmail.com|2025-10-28|Other|Yes|yes|COMSOC|CS|CS

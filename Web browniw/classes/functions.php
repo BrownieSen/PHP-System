@@ -12,7 +12,7 @@ function read_users() {
     foreach ($lines as $line) {
         $parts = explode('|', trim($line));
         // fname|mname|lname|age|mobile|email|birthdate|gender|username|password|course|role
-        if (count($parts) >= 11) {
+        if (count($parts) >= 13) {
             $users[] = [
                 'fname' => $parts[0],
                 'mname' => $parts[1],
@@ -24,8 +24,9 @@ function read_users() {
                 'gender' => $parts[7],
                 'username' => $parts[8],
                 'password' => $parts[9],
-                'course' => $parts[10],
-                'role' => isset($parts[11]) ? $parts[11] : ''
+                'department' => $parts[10],
+                'course' => $parts[11],
+                'role' => isset($parts[12]) ? $parts[11] : ''
             ];
         }
     }
@@ -44,10 +45,11 @@ function save_users(array $users) {
     rewind($handle);
     foreach ($users as $u) {
         $line = implode('|', [
-            $u['fname'],$u['mname'],$u['lname'],$u['age'],
-            $u['mobile'],$u['email'],$u['birthdate'],$u['gender'],
-            $u['username'],$u['password'],$u['course'],$u['role']
-        ]) . "\n";
+    $u['fname'],$u['mname'],$u['lname'],$u['age'],
+    $u['mobile'],$u['email'],$u['birthdate'],$u['gender'],
+    $u['username'],$u['password'],$u['department'],$u['course'],$u['role']
+]) . "\n";
+
         fwrite($handle, $line);
     }
     fflush($handle);

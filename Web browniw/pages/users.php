@@ -40,11 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_edit'])) {
             $users[$i]['email'] = $_POST['edit_email'];
             $users[$i]['birthdate'] = $_POST['edit_birthdate'];
             $users[$i]['gender'] = $_POST['edit_gender'];
-            // username change
             $users[$i]['username'] = $_POST['edit_username'];
             $users[$i]['password'] = $_POST['edit_password'];
             $users[$i]['course'] = $_POST['edit_course'];
-            $users[$i]['role'] = ($_POST['edit_course']=='THM')?'HM':'COMSOC';
+            $users[$i]['role'] = $_POST['edit_role']; // renamed as department
             break;
         }
     }
@@ -108,33 +107,64 @@ include_once __DIR__ . '/../classes/functions.php';
           <div class="two-cols">
             <label>Birthdate<input type="date" name="edit_birthdate" value="<?=htmlspecialchars($editUser['birthdate'])?>" required></label>
             <label>Gender
-              <div class="gender-group">
-                <label><input type="radio" name="edit_gender" value="Male" <?= ($editUser['gender']=='Male')?'checked':'' ?>> Male</label>
-                <label><input type="radio" name="edit_gender" value="Female" <?= ($editUser['gender']=='Female')?'checked':'' ?>> Female</label>
-              </div>
+              <select name="edit_gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male" <?= ($editUser['gender'] == 'Male') ? 'selected' : '' ?>>Male</option>
+                <option value="Female" <?= ($editUser['gender'] == 'Female') ? 'selected' : '' ?>>Female</option>
+                <option value="Other" <?= ($editUser['gender'] == 'Other') ? 'selected' : '' ?>>Other</option>
+              </select>
             </label>
           </div>
           <div class="two-cols">
             <label>Username<input name="edit_username" value="<?=htmlspecialchars($editUser['username'])?>" required></label>
             <label>Password<input name="edit_password" value="<?=htmlspecialchars($editUser['password'])?>" required></label>
           </div>
-          <div class="two-cols">
-            <label>Course
-              <select name="edit_course">
-                <option value="CS" <?= ($editUser['course']=='CS')?'selected':'' ?>>CS</option>
-                <option value="IT" <?= ($editUser['course']=='IT')?'selected':'' ?>>IT</option>
-                <option value="THM" <?= ($editUser['course']=='THM')?'selected':'' ?>>THM</option>
-              </select>
-            </label>
-            <div style="align-self:center;padding-left:10px;">
-              <p>Role will update based on course.</p>
-            </div>
-          </div>
-          <div class="form-row">
-            <button class="btn" name="save_edit" type="submit">Save</button>
-            <a class="btn outline" href="users.php">Cancel</a>
-          </div>
+        <div class="two-cols">
+          <label>Department
+            <select name="edit_role" id="edit_role" required>
+              <option value="COMSOC" <?= ($editUser['role'] == 'COMSOC') ? 'selected' : '' ?>>COMSOC</option>
+              <option value="STIGMA" <?= ($editUser['role'] == 'STIGMA') ? 'selected' : '' ?>>STIGMA</option>
+              <option value="THM" <?= ($editUser['role'] == 'THM') ? 'selected' : '' ?>>THM</option>
+            </select>
+          </label>
+
+          <label>Course
+            <select name="edit_course" id="edit_course" required>
+              <option value="CS" <?= ($editUser['course'] == 'CS') ? 'selected' : '' ?>>CS</option>
+              <option value="IT" <?= ($editUser['course'] == 'IT') ? 'selected' : '' ?>>IT</option>
+              <option value="BMMA" <?= ($editUser['course'] == 'BMMA') ? 'selected' : '' ?>>BMMA</option>
+              <option value="HM" <?= ($editUser['course'] == 'HM') ? 'selected' : '' ?>>HM</option>
+              <option value="TM" <?= ($editUser['course'] == 'TM') ? 'selected' : '' ?>>TM</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <button class="btn" name="save_edit" type="submit">Save</button>
+          <a class="btn outline" href="users.php">Cancel</a>
+        </div>
         </form>
+
+
+        <script type="text/javascript">
+        document.getElementById('edit_role').addEventListener('change', function() {
+          const dept = this.value;
+          const courseSelect = document.getElementById('edit_course');
+          courseSelect.innerHTML = '';
+
+          if (dept === 'COMSOC') {
+            courseSelect.innerHTML = `
+              <option value="CS">CS</option>
+              <option value="IT">IT</option>`;
+          } else if (dept === 'STIGMA') {
+            courseSelect.innerHTML = `<option value="BMMA">BMMA</option>`;
+          } else if (dept === 'THM') {
+            courseSelect.innerHTML = `
+              <option value="HM">HM</option>
+              <option value="TM">TM</option>`;
+          }
+        });
+        </script>
       </section>
     <?php endif; ?>
 
